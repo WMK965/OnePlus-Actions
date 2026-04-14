@@ -146,6 +146,12 @@ on:
           - 'On'
           - 'Off'
         default: 'Off'
+
+      BUILD_TIMESTAMP:
+        description: "自定义内核构建时间（影响 uname -a / /proc/version；留空则使用默认逻辑）"
+        required: false
+        type: string
+        default: ''
          
 jobs:
   build:
@@ -521,10 +527,21 @@ jobs:
           echo "🏗️ 开始内核编译..."
           export KBUILD_BUILD_USER="xiaoxiaow"
           export KBUILD_BUILD_HOST="xiaoxiaow_build"
+          export KBUILD_BUILD_VERSION=1
+
+          # 统一处理 uname -a / /proc/version 中显示的内核构建时间
+          if [ -n "${{ github.event.inputs.BUILD_TIMESTAMP }}" ]; then
+            export KBUILD_BUILD_TIMESTAMP="${{ github.event.inputs.BUILD_TIMESTAMP }}"
+            echo "🕒 使用自定义构建时间: $KBUILD_BUILD_TIMESTAMP"
+          elif [ "${{ github.event.inputs.KERNEL_VERSION }}" == "6.1" ]; then
+            export KBUILD_BUILD_TIMESTAMP="Tue Mar 10 03:53:33 UTC 2026"
+            echo "🕒 使用 6.1 默认构建时间: $KBUILD_BUILD_TIMESTAMP"
+          else
+            export KBUILD_BUILD_TIMESTAMP="$(LC_ALL=C date -u '+%a %b %d %T UTC %Y')"
+            echo "🕒 使用当前 UTC 构建时间: $KBUILD_BUILD_TIMESTAMP"
+          fi
 
           if [ "${{ github.event.inputs.KERNEL_VERSION }}" == "6.1" ]; then
-            export KBUILD_BUILD_TIMESTAMP="Tue Mar 10 03:53:33 UTC 2026"
-            export KBUILD_BUILD_VERSION=1
             export PATH="$GITHUB_WORKSPACE/kernel_workspace/kernel_platform/prebuilts/clang/host/linux-x86/clang-r487747c/bin:$PATH"
             export PATH="/usr/lib/ccache:$PATH"
             sudo apt install libelf-dev
