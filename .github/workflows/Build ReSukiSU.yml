@@ -148,7 +148,7 @@ on:
         default: 'Off'
 
       BUILD_TIMESTAMP:
-        description: "自定义内核构建时间（影响 uname -a / /proc/version；留空则使用默认逻辑）"
+        description: "自定义内核构建时间（例：Tue Mar 10 03:53:33 UTC 2026）"
         required: false
         type: string
         default: ''
