@@ -11,6 +11,7 @@
 ## OnePlus 开源地址
 
 [![OnePlus Repository](https://img.shields.io/badge/OnePlus-Repository-red)](https://github.com/Xiaomichael/kernel_manifest)
+Tips: 最近上游内核源码可能会出现刷入不开机的情况，请仔细辨别
 
 ## 设备支持
 
@@ -54,6 +55,7 @@ Tips: SukiSU 由于长期不更新 编译时容易报错且稳定性较差 已�
 - **BBG基带守护**: 推荐开启，看名字就知道是干啥的
 - **⚠️代理优化**: 骁龙芯片可以开，联发科芯片 `千万不要开` ，否则出现恶性Bug！
 - **是否添加Unicode零宽绕过修复补丁**: 仅推荐内核KMI版本为``android12-5.10``开启, ``5.15 - 6.12``可以使用 [这个 LSPosed 模块](https://t.me/real5ec1cff/271) 无痛修复
+- **CVE-2026-43499 rtmutex修复链**: 默认关闭，会为``5.10 - 6.6``内核应用原始 UAF 修复及 CVE-2026-53163 次生修复
 
 ### ④ 作者碎碎念
 
